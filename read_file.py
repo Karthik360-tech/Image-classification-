@@ -2,31 +2,31 @@ import pandas as pd
 import os
 import shutil
 
-file = 'G:/NKV Study/Project_1.xlsx'
+file = 'Train.xlsx'
 data = pd.read_excel(file)
-pics = []
-for i in range(4) :
-    pics.append(data['Pics'][i].split(","))
-print(pics)
 
-folders = []
-for i in range(4) :
-    folders.append(data['Folders'][i].split(","))
 
-print(folders)
+imgs=[]
+for i in range(0,data.shape[0]):
+    I=data['Pics'].iloc[i].split("\\")[-1]
+    imgs.append(I)
 
-count = 0
-d = {} #Empty dictionary to add values into
+data['Images']=imgs
 
-for i in pics :
-    for j in i :
-        d[count] = str(j)
-    count+=1
-print(d)
 Folders=list(data['Folders'].unique())
-os.chdir("G:\\destination\\new1")
+
+root_dir=os.getcwd()
+
+Train_dir=os.path.join(root_dir,"Train")
+
+os.chdir(Train_dir)
+
 for folder in Folders:
-    os.mkdir(folder)
+    try:
+        os.makedirs(folder)
+    except OSError:
+        pass
+
     for i in range(0,data.shape[0]):
-        if data.iloc[i]['Folder']==folder:
-            shutil.move(os.path.join())
+        if data.iloc[i]['Folders']==folder:
+            shutil.copy(os.path.join(Train_dir,data["Images"][i]),os.path.join(Train_dir,folder))
